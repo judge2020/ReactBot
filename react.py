@@ -35,12 +35,10 @@ async def on_ready():
 @client.event
 async def on_message(message):
 	try:
-		
+		for(user in userids):
+			print("add reaction")
 	except:
 		print("Unexpected error:", sys.exc_info()[0])
-
-def test_start(token2):
-	client.run(token2)
 
 if token:
 	client.run(token)
