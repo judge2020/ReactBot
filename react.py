@@ -8,9 +8,17 @@ import os.path
 
 
 #CONFIG START -------
-channelids = ['123456789': [':thinking:', ':upside_down:'], '987654321': [':smile:', ':forgot_others:']]
-userids = ['userid1': [':antoher:', ':someother_emoji:'], 'userid2': [':andanotherone:', ':another_one:']]
-regexes = ['regexpattern1': [':emoji9:', ':emoji10:'], 'pattern2': [':emoji11:', ':emoji12']]
+channelids = {
+'123456789': [':thinking:', ':upside_down:'], 
+'987654321': [':smile:', ':forgot_others:']
+}
+userids = {
+'userid1': [':antoher:', ':someother_emoji:'], 
+'userid2': [':andanotherone:', ':another_one:']
+}
+regexes = {'regexpattern1': [':emoji9:', ':emoji10:'], 
+'pattern2': [':emoji11:', ':emoji12']
+}
 token = ''
 #CONFIG END -------
 
