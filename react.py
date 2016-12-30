@@ -35,7 +35,7 @@ async def on_ready():
 @client.event
 async def on_message(message):
 	try:
-		for(user in userids):
+		for key, value in userids:
 			print("add reaction")
 	except:
 		print("Unexpected error:", sys.exc_info()[0])
