@@ -56,4 +56,6 @@ async def on_message(message):
 if token:
 	client.run(token)
 else:
-	client.run(input('Please input token: '))
+	token = input('Please input token: ')
+	os.system('cls' if os.name == 'nt' else 'clear')
+	client.run(token)
