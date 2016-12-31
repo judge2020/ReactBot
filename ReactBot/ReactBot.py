@@ -61,7 +61,10 @@ async def on_message(message):
 				await client.add_reaction(message, emoji)
 
 if os.path.exists('token.txt'):
-	client.run(Path('token.txt').read_text(ascii))
+	tokenfile = open('token.txt', 'r')
+	token = tokenfile.read()
+	tokenfile.close()
+	client.run(token)
 
 else:
 	token = input('Please input token: ')
