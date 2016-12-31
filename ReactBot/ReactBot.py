@@ -11,15 +11,16 @@ import sys
 
 #CONFIG START -------
 channelids = {
-'123456789': [':thinking:', ':upside_down:'], 
-'987654321': [':smile:', ':forgot_others:']
+'123456789': ['thinking', 'upside_down'], 
+'987654321': ['smile', 'upside_down']
 }
 userids = {
-'userid1': [':antoher:', ':someother_emoji:'], 
-'userid2': [':andanotherone:', ':another_one:']
+'77542916213444608': ['thinking', 'upside_down'], 
+'userid2': ['smile', 'upside_down']
 }
-regexes = {'regexpattern1': [':emoji9:', ':emoji10:'], 
-'pattern2': [':emoji11:', ':emoji12']
+regexes = {
+'regexpattern1': ['smile', 'upside_down'], 
+'pattern2': ['smile', 'upside_down']
 }
 token = ''
 #CONFIG END -------
@@ -36,23 +37,25 @@ async def on_ready():
 
 @client.event
 async def on_message(message):
-	try:
-		for key, value in userids:
-			if (message.author.id == key):
+	print(message.content)
+	for key, value in userids.items():
+		print(message.author.id)
+		if (message.author.id == key):
+			for emoji in value:
+				print('Adding emoji ' + emoji + ' to message: "' + message.content + '"')
+				client.add_reaction(message, emoji)
+
+	for key, value in channelids.items():
+		if (message.channel.id == key):
 				for emoji in value:
+					print('Adding emoji ' + emoji + ' to message: "' + message.content + '"')
 					client.add_reaction(message, emoji)
-		
-		for key, value in channelids:
-			if (message.channel.id == key):
-					for emoji in value:
-						client.add_reaction(message, emoji)
-		
-		for key, value in regexes:
-			if (re.match(key, message.content)):
-				for emoji in value:
-					client.add_reaction(message, emoji)
-	except:
-		print("Unexpected error:", sys.exc_info()[0])
+	
+	for key, value in regexes.items():
+		if (re.match(key, message.content)):
+			for emoji in value:
+				print('Adding emoji ' + emoji + ' to message: "' + message.content + '"')
+				client.add_reaction(message, emoji)
 
 if token:
 	client.run(token)
