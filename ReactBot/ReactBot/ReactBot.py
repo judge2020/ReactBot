@@ -44,7 +44,7 @@ async def on_message(message):
 		for key, value in channelids:
 			if (message.channel.id == key):
 					for emoji in value:
-						client.add_reaction(messsage, emoji)
+						client.add_reaction(message, emoji)
 		
 		for key, value in regexes:
 			if (re.match(key, message.content)):
