@@ -10,17 +10,19 @@ import sys
 
 
 #CONFIG START -------
+#NOTE: unicode emojis need to be in escape sequences, copy them from emojipedia.org
+#use 'name:emojiid' for custom emoji
 channelids = {
-'123456789': ['thinking', 'upside_down'], 
-'987654321': ['smile', 'upside_down']
+'159020861708435457': ['\U00002764', '\U0001F44D', '\U0001F44C', '\U0001F44E', ':dust:'], 
+'264843760079339530': ['\U00002764', '\U0001F44D', '\U0001F44C', '\U0001F44E']
 }
 userids = {
-'77542916213444608': ['thinking', 'upside_down'], 
-'userid2': ['smile', 'upside_down']
+#'77542916213444608': ['thinking', 'upside_down'], 
+#'userid2': ['smile', 'upside_down']
 }
 regexes = {
-'regexpattern1': ['smile', 'upside_down'], 
-'pattern2': ['smile', 'upside_down']
+#'regexpattern1': ['smile', 'upside_down'], 
+#'pattern2': ['smile', 'upside_down']
 }
 token = ''
 #CONFIG END -------
@@ -42,20 +44,20 @@ async def on_message(message):
 		print(message.author.id)
 		if (message.author.id == key):
 			for emoji in value:
-				print('Adding emoji ' + emoji + ' to message: "' + message.content + '"')
-				client.add_reaction(message, emoji)
+				print('Adding emoji to message: "' + message.content + '"')
+				await client.add_reaction(message, emoji)
 
 	for key, value in channelids.items():
 		if (message.channel.id == key):
 				for emoji in value:
-					print('Adding emoji ' + emoji + ' to message: "' + message.content + '"')
-					client.add_reaction(message, emoji)
+					print('Adding emoji to message: "' + message.content + '"')
+					await client.add_reaction(message, emoji)
 	
 	for key, value in regexes.items():
 		if (re.match(key, message.content)):
 			for emoji in value:
-				print('Adding emoji ' + emoji + ' to message: "' + message.content + '"')
-				client.add_reaction(message, emoji)
+				print('Adding emoji to message: "' + message.content + '"')
+				await client.add_reaction(message, emoji)
 
 if token:
 	client.run(token)
