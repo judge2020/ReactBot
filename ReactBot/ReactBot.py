@@ -6,6 +6,7 @@ import discord
 import asyncio
 import os.path
 import re
+import sys
 
 
 #CONFIG START -------
