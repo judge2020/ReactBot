@@ -51,6 +51,7 @@ else:
 import discord
 import asyncio
 import os.path
+import re
 
 
 #CONFIG START -------
@@ -82,7 +83,19 @@ async def on_ready():
 async def on_message(message):
 	try:
 		for key, value in userids:
-			print("add reaction")
+			if (message.author.id == key):
+				for emoji in value:
+					client.add_reaction(message, emoji)
+		
+		for key, value in channelids:
+			if (message.channel.id == key):
+					for emoji in value:
+						client.add_reaction(message, emoji)
+		
+		for key, value in regexes:
+			if (re.match(key, message.content)):
+				for emoji in value:
+					client.add_reaction(message, emoji)
 	except:
 		print("Unexpected error:", sys.exc_info()[0])
 
