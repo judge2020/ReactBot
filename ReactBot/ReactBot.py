@@ -1,3 +1,4 @@
+#!/usr/bin/python
 #python 3
 #requires https://github.com/Rapptz/discord.py / "pip install discord.py"
 #licensed under the MIT license. For more information view LICENSE.md
@@ -60,7 +61,7 @@ async def on_message(message):
 				await client.add_reaction(message, emoji)
 
 if os.path.exists('token.txt'):
-	client.run(Path('token.txt').read_text()
+	client.run(Path('token.txt').read_text())
 
 else:
 	token = input('Please input token: ')
