@@ -7,6 +7,7 @@ import asyncio
 import os.path
 import re
 import sys
+from pathlib import Path
 
 
 #CONFIG START -------
@@ -24,7 +25,6 @@ regexes = {
 #'regexpattern1': ['smile', 'upside_down'], 
 #'pattern2': ['smile', 'upside_down']
 }
-token = ''
 #CONFIG END -------
 
 
@@ -59,8 +59,9 @@ async def on_message(message):
 				print('Adding emoji to message: "' + message.content + '"')
 				await client.add_reaction(message, emoji)
 
-if token:
-	client.run(token)
+if os.path.exists('token.txt'):
+	client.run(Path('token.txt').read_text()
+
 else:
 	token = input('Please input token: ')
 	os.system('cls' if os.name == 'nt' else 'clear')
