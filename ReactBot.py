@@ -42,25 +42,28 @@ async def on_ready():
 
 @client.event
 async def on_message(message):
-    print(message.content)
-    for key, value in userids.items():
-        print(message.author.id)
-        if message.author.id == key:
-            for emoji in value:
-                print('Adding emoji to message: "' + message.content + '"')
-                await client.add_reaction(message, emoji)
+    try:
+        print(message.content)
+        for key, value in userids.items():
+            print(message.author.id)
+            if message.author.id == key:
+                for emoji in value:
+                    print('Adding emoji to message: "' + message.content + '"')
+                    await client.add_reaction(message, emoji)
 
-    for key, value in channelids.items():
-        if message.channel.id == key:
-            for emoji in value:
-                print('Adding emoji to message: "' + message.content + '"')
-                await client.add_reaction(message, emoji)
+        for key, value in channelids.items():
+            if message.channel.id == key:
+                for emoji in value:
+                    print('Adding emoji to message: "' + message.content + '"')
+                    await client.add_reaction(message, emoji)
 
-    for key, value in regexes.items():
-        if re.match(key, message.content):
-            for emoji in value:
-                print('Adding emoji to message: "' + message.content + '"')
-                await client.add_reaction(message, emoji)
+        for key, value in regexes.items():
+            if re.match(key, message.content):
+                for emoji in value:
+                    print('Adding emoji to message: "' + message.content + '"')
+                    await client.add_reaction(message, emoji)
+    except:
+        print('unable to add emoji')
 
 
 if os.path.exists('token.txt'):
