@@ -64,14 +64,17 @@ async def on_message(message):
                     await client.add_reaction(message, emoji)
     except:
         print('unable to add emoji')
+        raise
 
 
 if os.path.exists('token.txt'):
     tokenfile = open('token.txt', 'r')
     token = tokenfile.read()
     tokenfile.close()
-    client.run(token)
-
+    try:
+        client.run(token)
+    except ConnectionResetError:
+        client.run(token)
 else:
     token = input('Please input token: ')
     os.system('cls' if os.name == 'nt' else 'clear')
