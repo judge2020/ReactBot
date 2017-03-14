@@ -67,14 +67,17 @@ async def on_message(message):
         raise
 
 
+def Main():
+    try:
+        client.run(token)
+    except:
+        Main()
+
 if os.path.exists('token.txt'):
     tokenfile = open('token.txt', 'r')
     token = tokenfile.read()
     tokenfile.close()
-    try:
-        client.run(token)
-    except ConnectionResetError:
-        client.run(token)
+    Main()
 else:
     token = input('Please input token: ')
     os.system('cls' if os.name == 'nt' else 'clear')
