@@ -8,6 +8,7 @@ import asyncio
 import os.path
 import re
 import sys
+import subprocess
 from pathlib import Path
 
 # CONFIG START -------
@@ -30,10 +31,24 @@ exclusions = [
     '(x)',
     '(no-reactions)'
 ]
+
+statuskeyword = 'Ping'
+
+updateKeywords = {
+    # 'userid': 'keyword',
+    '77542916213444608': 'updateReact'
+}
 # CONFIG END -------
 
 
 client = discord.Client()
+
+
+def file_len(filename):
+    with open(filename) as f:
+        for i, l in enumerate(f):
+            pass
+    return i + 1
 
 
 @client.event
@@ -52,6 +67,14 @@ async def on_message(message):
             if value in message.content:
                 print('excluded above message from reactions')
                 return
+
+        if message.channel == statuskeyword:
+            client.send_message(message.channel, 'Pong - ReactBot ' + file_len('ReactBot.py'))
+
+        for key, value in updateKeywords.items():
+            if message.author.id == key and value == message.content:
+                client.send_message(message.channel, 'Trying to update (lines in file ' + file_len('ReactBot.py') + ')')
+                subprocess.call(['./update.sh'])
 
         for key, value in userids.items():
             print(message.author.id)
@@ -81,6 +104,7 @@ def Main():
         client.run(token)
     except:
         Main()
+
 
 if os.path.exists('token.txt'):
     tokenfile = open('token.txt', 'r')
