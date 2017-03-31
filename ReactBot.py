@@ -26,6 +26,10 @@ regexes = {
     # 'regexpattern1': ['smile', 'upside_down'],
     # 'pattern2': ['smile', 'upside_down']
 }
+exclusions = [
+    '(x)',
+    '(no-reactions)'
+]
 # CONFIG END -------
 
 
@@ -44,6 +48,11 @@ async def on_ready():
 async def on_message(message):
     try:
         print(message.content)
+        for value in exclusions:
+            if value in message.content:
+                print('excluded above message from reactions')
+                return
+
         for key, value in userids.items():
             print(message.author.id)
             if message.author.id == key:
@@ -81,4 +90,4 @@ if os.path.exists('token.txt'):
 else:
     token = input('Please input token: ')
     os.system('cls' if os.name == 'nt' else 'clear')
-    client.run(token)
+    Main()
