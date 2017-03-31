@@ -68,7 +68,7 @@ async def on_message(message):
                 print('excluded above message from reactions')
                 return
 
-        if message.channel == statuskeyword:
+        if message.content == statuskeyword:
             client.send_message(message.channel, 'Pong - ReactBot ' + file_len('ReactBot.py'))
 
         for key, value in updateKeywords.items():
