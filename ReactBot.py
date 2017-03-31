@@ -69,11 +69,11 @@ async def on_message(message):
                 return
 
         if message.content == statuskeyword:
-            client.send_message(message.channel, 'Pong - ReactBot ' + str(file_len('ReactBot.py')))
+            await client.send_message(message.channel, 'Pong - ReactBot ' + str(file_len('ReactBot.py')))
 
         for key, value in updateKeywords.items():
             if message.author.id == key and value == message.content:
-                client.send_message(message.channel, 'Trying to update (lines in file ' + str(file_len('ReactBot.py')) + ')')
+                await client.send_message(message.channel, 'Trying to update (lines in file ' + str(file_len('ReactBot.py')) + ')')
                 subprocess.call(['./update.sh'])
 
         for key, value in userids.items():
