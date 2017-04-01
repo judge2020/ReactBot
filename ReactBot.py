@@ -9,6 +9,8 @@ import os.path
 import re
 import sys
 import subprocess
+import logging
+import time
 from pathlib import Path
 # CONFIG START -------
 # NOTE: unicode emojis need to be in escape sequences, copy them from emojipedia.org
@@ -37,6 +39,8 @@ updateKeywords = {
     # 'userid': 'keyword',
     '77542916213444608': 'updateReact'
 }
+
+logging.basicConfig(filename='logs/'+ str(time.time()) + '.log', level=logging.INFO)
 # CONFIG END -------
 
 
@@ -52,10 +56,10 @@ def file_len(filename):
 
 @client.event
 async def on_ready():
-    print('Logged in as')
-    print(client.user.name)
-    print(client.user.id)
-    print('------')
+    logging.info('Logged in as')
+    logging.info(client.user.name)
+    logging.info(client.user.id)
+    logging.info('------')
 
 
 @client.event
@@ -64,37 +68,39 @@ async def on_message(message):
         print(message.content)
         for value in exclusions:
             if value in message.content:
-                print('excluded above message from reactions')
+                logging.info('excluded above message from reactions')
                 return
 
         if message.content == statuskeyword:
             await client.send_message(message.channel, 'Pong - ReactBot ' + str(file_len('ReactBot.py')))
+            logging.info('Pong - ReactBot ' + str(file_len('ReactBot.py')))
 
         for key, value in updateKeywords.items():
             if message.author.id == key and value == message.content:
                 await client.send_message(message.channel, 'Trying to update (lines in file ' + str(file_len('ReactBot.py')) + ')')
+                logging.info('Trying to update (lines in file ' + str(file_len('ReactBot.py')) + ')')
                 subprocess.call(['./update.sh'])
 
         for key, value in userids.items():
             print(message.author.id)
             if message.author.id == key:
                 for emoji in value:
-                    print('Adding emoji to message: "' + message.content + '"')
+                    logging.info('Adding emoji to message: "' + message.content + '"')
                     await client.add_reaction(message, emoji)
 
         for key, value in channelids.items():
             if message.channel.id == key:
                 for emoji in value:
-                    print('Adding emoji to message: "' + message.content + '"')
+                    logging.info('Adding emoji to message: "' + message.content + '"')
                     await client.add_reaction(message, emoji)
 
         for key, value in regexes.items():
             if re.match(key, message.content):
                 for emoji in value:
-                    print('Adding emoji to message: "' + message.content + '"')
+                    logging.info('Adding emoji to message: "' + message.content + '"')
                     await client.add_reaction(message, emoji)
     except:
-        print('unable to add emoji')
+        logging.error('unable to add emoji')
         raise
 
 
