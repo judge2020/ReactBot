@@ -10,15 +10,7 @@ import re
 import sys
 import subprocess
 from pathlib import Path
-import time
-
 # CONFIG START -------
-
-if not os.path.exists('logs'):
-    os.makedirs('logs')
-sys.stdout = open('logs/'+ str(time.time()) + '.txt', 'w')
-
-
 # NOTE: unicode emojis need to be in escape sequences, copy them from emojipedia.org
 # use 'name:emojiID' for custom emoji
 channelids = {
