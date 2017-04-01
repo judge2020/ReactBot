@@ -65,7 +65,7 @@ async def on_ready():
 @client.event
 async def on_message(message):
     try:
-        print(message.content)
+        logging.info(message.content)
         for value in exclusions:
             if value in message.content:
                 logging.info('excluded above message from reactions')
