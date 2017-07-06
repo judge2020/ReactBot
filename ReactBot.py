@@ -85,8 +85,8 @@ async def on_message(message):
                 return
 
         if message.channel.id in uploadChannels:
-            logging.info('Uploading image!')
             for value in message.attachments:
+                logging.info('Uploading image!' + message.channel.id)
                 result = iclient.upload_from_url(value['url'])
                 print(result['link'])
                 urllib3.PoolManager(cert_reqs='CERT_REQUIRED', ca_certs=certifi.where()).request('GET', config.server_endpoint + "?key=" +
