@@ -1,2 +1,4 @@
 discord.py
 pytest
+imgurpython
+urllib3[secure]

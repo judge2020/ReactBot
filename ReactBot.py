@@ -12,6 +12,10 @@ import subprocess
 import logging
 import time
 from pathlib import Path
+from imgurpython import ImgurClient
+import config
+import urllib3
+import certifi
 # CONFIG START -------
 # NOTE: unicode emojis need to be in escape sequences, copy them from emojipedia.org
 # use 'name:emojiID' for custom emoji
@@ -41,11 +45,20 @@ updateKeywords = {
 }
 
 logging.basicConfig(filename='logs/'+ str(time.time()) + '.log', level=logging.INFO)
+
+reactOwnMatch = False
+
+uploadChannels = [
+    '159020861708435457',
+    '264843760079339530'
+]
+
 # CONFIG END -------
 
 
 client = discord.Client()
 
+iclient = ImgurClient(config.client_id, config.client_secret)
 
 def file_len(filename):
     with open(filename) as f:
@@ -65,11 +78,20 @@ async def on_ready():
 @client.event
 async def on_message(message):
     try:
-        logging.info(message.content)
+        print(message.content)
         for value in exclusions:
             if value in message.content:
-                logging.info('excluded above message from reactions')
+                logging.info('excluded message "'+ message.content + '" from reactions')
                 return
+
+        if message.channel.id in uploadChannels:
+            logging.info('Uploading image!')
+            for value in message.attachments:
+                result = iclient.upload_from_url(value['url'])
+                print(result['link'])
+                urllib3.PoolManager(cert_reqs='CERT_REQUIRED', ca_certs=certifi.where()).request('GET', config.server_endpoint + "?key=" +
+                                                                        config.server_secret +
+                                              "&url=" + result['link'])
 
         if message.content == statuskeyword:
             await client.send_message(message.channel, 'Pong - ReactBot ' + str(file_len('ReactBot.py')))
@@ -108,15 +130,11 @@ def Main():
     try:
         client.run(token)
     except:
+        print('crashed')
+        time.sleep(3)
         Main()
 
 
-if os.path.exists('token.txt'):
-    tokenfile = open('token.txt', 'r')
-    token = tokenfile.read()
-    tokenfile.close()
-    Main()
-else:
-    token = input('Please input token: ')
-    os.system('cls' if os.name == 'nt' else 'clear')
-    Main()
+
+token = config.token
+Main()

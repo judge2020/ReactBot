@@ -1,5 +1,6 @@
 #custom token.txt
 token.txt
+config.py
 
 #logs
 *.log
