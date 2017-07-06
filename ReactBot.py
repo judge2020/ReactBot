@@ -16,6 +16,8 @@ from imgurpython import ImgurClient
 import config
 import urllib3
 import certifi
+from webhooks import webhook
+from webhooks.senders import targeted
 # CONFIG START -------
 # NOTE: unicode emojis need to be in escape sequences, copy them from emojipedia.org
 # use 'name:emojiID' for custom emoji
@@ -52,7 +54,6 @@ uploadChannels = [
     '159020861708435457',
     '264843760079339530'
 ]
-
 # CONFIG END -------
 
 
@@ -88,6 +89,8 @@ async def on_message(message):
             for value in message.attachments:
                 logging.info('Uploading image!' + message.channel.id)
                 result = iclient.upload_from_url(value['url'])
+                for url in config.webhooks:
+                    basic(url=url, imageurl=result['link'])
                 print(result['link'])
                 urllib3.PoolManager(cert_reqs='CERT_REQUIRED', ca_certs=certifi.where()).request('GET', config.server_endpoint + "?key=" +
                                                                         config.server_secret +
@@ -125,6 +128,9 @@ async def on_message(message):
         logging.error('unable to add emoji')
         raise
 
+@webhook(sender_callable=targeted.sender)
+def basic(url, imageurl):
+    return {"content": imageurl}
 
 def Main():
     try:

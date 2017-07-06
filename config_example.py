@@ -7,3 +7,7 @@ client_secret = 'YOUR CLIENT SECRET'
 #image uploading
 server_secret = ''
 server_endpoint = ''
+
+webhooks = [
+    ''
+]
