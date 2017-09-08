@@ -39,6 +39,8 @@ exclusions = [
     '(no-reactions)'
 ]
 
+startswithexclusion = '`'
+
 statuskeyword = 'Ping'
 
 updateKeywords = {
@@ -81,7 +83,7 @@ async def on_message(message):
     try:
         print(message.content)
         for value in exclusions:
-            if value in message.content:
+            if value in message.content or message.content.startswith(startswithexclusion):
                 logging.info('excluded message "'+ message.content + '" from reactions')
                 return
 
