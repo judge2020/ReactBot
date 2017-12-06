@@ -9,7 +9,6 @@ import os.path
 import re
 import sys
 import subprocess
-import logging
 import time
 from pathlib import Path
 from imgurpython import ImgurClient
@@ -49,7 +48,6 @@ updateKeywords = {
     '77542916213444608': 'updateReact'
 }
 
-logging.basicConfig(filename='logs/'+ str(time.time()) + '.log', level=logging.INFO)
 
 reactOwnMatch = False
 
@@ -73,10 +71,10 @@ def file_len(filename):
 
 @client.event
 async def on_ready():
-    logging.info('Logged in as')
-    logging.info(client.user.name)
-    logging.info(client.user.id)
-    logging.info('------')
+    print('Logged in as')
+    print(client.user.name)
+    print(client.user.id)
+    print('------')
 
 
 @client.event
@@ -85,12 +83,12 @@ async def on_message(message):
         print(message.content)
         for value in exclusions:
             if value in message.content or message.content.startswith(startswithexclusion):
-                logging.info('excluded message "'+ message.content + '" from reactions')
+                print('excluded message "'+ message.content + '" from reactions')
                 return
 
         if message.channel.id in uploadChannels:
             for value in message.attachments:
-                logging.info('Uploading image!' + message.channel.id)
+                print('Uploading image!' + message.channel.id)
                 result = iclient.upload_from_url(value['url'])
                 for url in config.webhooks:
                     basic(url=url, imageurl=result['link'])
@@ -101,34 +99,34 @@ async def on_message(message):
 
         if message.content == statuskeyword:
             await client.send_message(message.channel, 'Pong - ReactBot ' + str(file_len('ReactBot.py')))
-            logging.info('Pong - ReactBot ' + str(file_len('ReactBot.py')))
+            print('Pong - ReactBot ' + str(file_len('ReactBot.py')))
 
         for key, value in updateKeywords.items():
             if message.author.id == key and value == message.content:
                 await client.send_message(message.channel, 'Trying to update (lines in file ' + str(file_len('ReactBot.py')) + ')')
-                logging.info('Trying to update (lines in file ' + str(file_len('ReactBot.py')) + ')')
+                print('Trying to update (lines in file ' + str(file_len('ReactBot.py')) + ')')
                 subprocess.call(['./update.sh'])
 
         for key, value in userids.items():
             print(message.author.id)
             if message.author.id == key:
                 for emoji in value:
-                    logging.info('Adding emoji to message: "' + message.content + '"')
+                    print('Adding emoji to message: "' + message.content + '"')
                     await client.add_reaction(message, emoji)
 
         for key, value in channelids.items():
             if message.channel.id == key:
                 for emoji in value:
-                    logging.info('Adding emoji to message: "' + message.content + '"')
+                    print('Adding emoji to message: "' + message.content + '"')
                     await client.add_reaction(message, emoji)
 
         for key, value in regexes.items():
             if re.match(key, message.content):
                 for emoji in value:
-                    logging.info('Adding emoji to message: "' + message.content + '"')
+                    print('Adding emoji to message: "' + message.content + '"')
                     await client.add_reaction(message, emoji)
     except:
-        logging.error('unable to add emoji')
+        print('unable to add emoji')
         raise
 
 @webhook(sender_callable=targeted.sender)
