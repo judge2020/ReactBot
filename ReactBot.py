@@ -12,12 +12,20 @@ import subprocess
 import time
 from pathlib import Path
 from imgurpython import ImgurClient
-import config
 import urllib3
 import certifi
 from webhooks import webhook
 from webhooks.senders import targeted
 # CONFIG START -------
+#
+# Full config in environ coming soon. Also probably a rewrite for Discord.py 1.0.
+DISCORD_TOKEN = os.environ.get('DISCORD_TOKEN')
+IMGUR_CLIENT_ID = os.environ.get('IMGUR_CLIENT_ID', '')
+IMGUR_CLIENT_SECRET = os.environ.get('IMGUR_CLIENT_SECRET', '')
+SERVER_ENDPOINT = os.environ.get('SERVER_ENDPOINT', '')
+SERVER_SECRET = os.environ.get('SERVER_SECRET', '')
+SENTRY_DSN = os.environ.get('SENTRY_DSN', '')
+#
 # NOTE: unicode emojis need to be in escape sequences, copy them from emojipedia.org
 # use 'name:emojiID' for custom emoji
 channelids = {
@@ -55,12 +63,14 @@ uploadChannels = [
     '159020861708435457',
     '264843760079339530'
 ]
+
+_webhooks = []
 # CONFIG END -------
 
 
 client = discord.Client()
 
-iclient = ImgurClient(config.client_id, config.client_secret)
+iclient = ImgurClient(IMGUR_CLIENT_ID, IMGUR_CLIENT_SECRET)
 
 def file_len(filename):
     with open(filename) as f:
@@ -90,12 +100,11 @@ async def on_message(message):
             for value in message.attachments:
                 print('Uploading image!' + message.channel.id)
                 result = iclient.upload_from_url(value['url'])
-                for url in config.webhooks:
+                for url in _webhooks:
                     basic(url=url, imageurl=result['link'])
                 print(result['link'])
-                urllib3.PoolManager(cert_reqs='CERT_REQUIRED', ca_certs=certifi.where()).request('GET', config.server_endpoint + "?key=" +
-                                                                        config.server_secret +
-                                              "&url=" + result['link'])
+                if len(SERVER_ENDPOINT) >= 1:
+                    urllib3.PoolManager(cert_reqs='CERT_REQUIRED', ca_certs=certifi.where()).request('GET', SERVER_ENDPOINT + "?key=" + SERVER_SECRET + "&url=" + result['link'])
 
         if message.content == statuskeyword:
             await client.send_message(message.channel, 'Pong - ReactBot ' + str(file_len('ReactBot.py')))
@@ -135,13 +144,14 @@ def basic(url, imageurl):
 
 def Main():
     try:
-        client.run(token)
+        client.run(DISCORD_TOKEN)
     except:
+	    if len(SENTRY_DSN) >= 5:
+            import raven
+            errorReporter = raven.Client(SENTRY_DSN)
+            errorReporter.captureException()
         print('crashed')
         time.sleep(3)
         Main()
 
-
-
-token = config.token
 Main()

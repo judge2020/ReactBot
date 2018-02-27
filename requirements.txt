@@ -3,3 +3,4 @@ pytest
 imgurpython
 urllib3[secure]
 webhooks
+raven
