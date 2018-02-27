@@ -1,4 +1,5 @@
 #!/usr/bin/python
+# -*- coding: utf-8 -*-
 # python 3
 # requires https://github.com/Rapptz/discord.py / "pip install discord.py"
 # licensed under the MIT license. For more information view LICENSE.md
@@ -146,7 +147,7 @@ def Main():
     try:
         client.run(DISCORD_TOKEN)
     except:
-	    if len(SENTRY_DSN) >= 5:
+        if len(SENTRY_DSN) >= 5:
             import raven
             errorReporter = raven.Client(SENTRY_DSN)
             errorReporter.captureException()
