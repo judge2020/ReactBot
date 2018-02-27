@@ -73,6 +73,7 @@ client = discord.Client()
 
 iclient = ImgurClient(IMGUR_CLIENT_ID, IMGUR_CLIENT_SECRET)
 
+
 def file_len(filename):
     with open(filename) as f:
         for i, l in enumerate(f):
@@ -94,7 +95,8 @@ async def on_message(message):
         print(message.content)
         for value in exclusions:
             if value in message.content or message.content.startswith(startswithexclusion):
-                print('excluded message "'+ message.content + '" from reactions')
+                print('excluded message "' +
+                      message.content + '" from reactions')
                 return
 
         if message.channel.id in uploadChannels:
@@ -105,7 +107,8 @@ async def on_message(message):
                     basic(url=url, imageurl=result['link'])
                 print(result['link'])
                 if len(SERVER_ENDPOINT) >= 1:
-                    urllib3.PoolManager(cert_reqs='CERT_REQUIRED', ca_certs=certifi.where()).request('GET', SERVER_ENDPOINT + "?key=" + SERVER_SECRET + "&url=" + result['link'])
+                    urllib3.PoolManager(cert_reqs='CERT_REQUIRED', ca_certs=certifi.where()).request(
+                        'GET', SERVER_ENDPOINT + "?key=" + SERVER_SECRET + "&url=" + result['link'])
 
         if message.content == statuskeyword:
             await client.send_message(message.channel, 'Pong - ReactBot ' + str(file_len('ReactBot.py')))
@@ -114,7 +117,8 @@ async def on_message(message):
         for key, value in updateKeywords.items():
             if message.author.id == key and value == message.content:
                 await client.send_message(message.channel, 'Trying to update (lines in file ' + str(file_len('ReactBot.py')) + ')')
-                print('Trying to update (lines in file ' + str(file_len('ReactBot.py')) + ')')
+                print('Trying to update (lines in file ' +
+                      str(file_len('ReactBot.py')) + ')')
                 subprocess.call(['./update.sh'])
 
         for key, value in userids.items():
@@ -139,9 +143,11 @@ async def on_message(message):
         print('unable to add emoji')
         raise
 
+
 @webhook(sender_callable=targeted.sender)
 def basic(url, imageurl):
     return {"content": imageurl}
+
 
 def Main():
     try:
@@ -154,5 +160,6 @@ def Main():
         print('crashed')
         time.sleep(3)
         Main()
+
 
 Main()
