@@ -33,7 +33,7 @@ channelids = {
     '159020861708435457': ['\U00002764', '\U0001F44D', '\U0001F44C', '\U0001F44E', 'dust:245699991761321984'],
     '264843760079339530': ['\U00002764', '\U0001F44D', '\U0001F44C', '\U0001F44E', 'dust:245699991761321984'],
     '267062314446880771': ['\U00002764', '\U0001F44D', '\U0001F44C', '\U0001F44E', 'dust:245699991761321984'],
-    '285072438625042432': ['✅', '❌']
+    '386329867404312576': ['✅', '❌']
 }
 userids = {
     # '77542916213444608': ['thinking', 'upside_down'],
@@ -60,10 +60,7 @@ updateKeywords = {
 
 reactOwnMatch = False
 
-uploadChannels = [
-    '159020861708435457',
-    '264843760079339530'
-]
+uploadChannels = []
 
 _webhooks = []
 # CONFIG END -------
@@ -99,27 +96,9 @@ async def on_message(message):
                       message.content + '" from reactions')
                 return
 
-        if message.channel.id in uploadChannels:
-            for value in message.attachments:
-                print('Uploading image!' + message.channel.id)
-                result = iclient.upload_from_url(value['url'])
-                for url in _webhooks:
-                    basic(url=url, imageurl=result['link'])
-                print(result['link'])
-                if len(SERVER_ENDPOINT) >= 1:
-                    urllib3.PoolManager(cert_reqs='CERT_REQUIRED', ca_certs=certifi.where()).request(
-                        'GET', SERVER_ENDPOINT + "?key=" + SERVER_SECRET + "&url=" + result['link'])
-
         if message.content == statuskeyword:
             await client.send_message(message.channel, 'Pong - ReactBot ' + str(file_len('ReactBot.py')))
             print('Pong - ReactBot ' + str(file_len('ReactBot.py')))
-
-        for key, value in updateKeywords.items():
-            if message.author.id == key and value == message.content:
-                await client.send_message(message.channel, 'Trying to update (lines in file ' + str(file_len('ReactBot.py')) + ')')
-                print('Trying to update (lines in file ' +
-                      str(file_len('ReactBot.py')) + ')')
-                subprocess.call(['./update.sh'])
 
         for key, value in userids.items():
             print(message.author.id)
@@ -139,6 +118,17 @@ async def on_message(message):
                 for emoji in value:
                     print('Adding emoji to message: "' + message.content + '"')
                     await client.add_reaction(message, emoji)
+
+        if message.channel.id in uploadChannels:
+            for value in message.attachments:
+                print('Uploading image!' + message.channel.id)
+                result = iclient.upload_from_url(value['url'])
+                for url in _webhooks:
+                    basic(url=url, imageurl=result['link'])
+                print(result['link'])
+                if len(SERVER_ENDPOINT) >= 1:
+                    urllib3.PoolManager(cert_reqs='CERT_REQUIRED', ca_certs=certifi.where()).request(
+                        'GET', SERVER_ENDPOINT + "?key=" + SERVER_SECRET + "&url=" + result['link'])
     except:
         print('unable to add emoji')
         raise
