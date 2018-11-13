@@ -68,7 +68,9 @@ _webhooks = []
 
 client = discord.Client()
 
-iclient = ImgurClient(IMGUR_CLIENT_ID, IMGUR_CLIENT_SECRET)
+if len(IMGUR_CLIENT_ID) > 1:
+    iclient = ImgurClient(IMGUR_CLIENT_ID, IMGUR_CLIENT_SECRET)
+
 
 
 def file_len(filename):
@@ -119,7 +121,7 @@ async def on_message(message):
                     print('Adding emoji to message: "' + message.content + '"')
                     await client.add_reaction(message, emoji)
 
-        if message.channel.id in uploadChannels:
+        if message.channel.id in uploadChannels and len(IMGUR_CLIENT_ID) > 1:
             for value in message.attachments:
                 print('Uploading image!' + message.channel.id)
                 result = iclient.upload_from_url(value['url'])
