@@ -1,6 +1,5 @@
 discord.py
 pytest
-imgurpython
 urllib3[secure]
 webhooks
-raven
+sentry-sdk
