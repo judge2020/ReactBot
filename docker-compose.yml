@@ -5,3 +5,8 @@ services:
     build: src
     env_file: .env
     restart: always
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "200k"
+        max-file: "10"
