@@ -6,12 +6,13 @@
 
 import os.path
 import re
-import time
 from typing import TYPE_CHECKING
 
 import discord
-from webhooks import webhook
-from webhooks.senders import targeted
+
+import logging
+
+logging.basicConfig(level=logging.INFO)
 
 # CONFIG START -------
 #
@@ -28,7 +29,7 @@ channelids = {
     '386329867404312576': ['✅', '❌']
 }
 userids = {
-    # '77542916213444608': ['thinking', 'upside_down'],
+    '77542916213444608': ['\U00002764', 'thinking', 'upside_down'],
     # 'userid2': ['smile', 'upside_down']
 }
 regexes = {
