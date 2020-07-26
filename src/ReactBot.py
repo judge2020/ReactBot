@@ -80,13 +80,13 @@ async def on_message(message: discord.Message):
         await message.channel.send('Pong - ReactBot')
 
     for key, value in userids.items():
-        if message.author.id == key:
+        if str(message.author.id) == key:
             for emoji in value:
                 print('Adding emoji to message: "' + message.content + '"')
                 await message.add_reaction(emoji)
 
     for key, value in channelids.items():
-        if message.channel.id == key:
+        if str(message.channel.id) == key:
             for emoji in value:
                 print('Adding emoji to message: "' + message.content + '"')
                 await message.add_reaction(emoji)
